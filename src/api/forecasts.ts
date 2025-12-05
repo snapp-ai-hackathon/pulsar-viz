@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import { apiClient } from "./client";
 import type { HexagonInfo, ForecastResult, BulkForecastRequest } from "./types";
 
@@ -111,12 +112,13 @@ export async function fetchHexagons(
       console.log(`[API] Sample hexagon:`, response.data[0]);
     }
     return response.data || [];
-  } catch (error: any) {
+  } catch (error) {
+    const axiosError = error as AxiosError;
     console.error(`[API] ✗ Error fetching hexagons:`, {
-      message: error.message,
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-      data: error.response?.data,
+      message: axiosError.message,
+      status: axiosError.response?.status,
+      statusText: axiosError.response?.statusText,
+      data: axiosError.response?.data,
     });
     throw error;
   }
@@ -136,11 +138,12 @@ export async function fetchBulkForecast(
     const normalized = normalizeForecastResponse(response.data);
     console.log(`[API] ✓ Normalized to ${normalized.length} forecasts`);
     return normalized;
-  } catch (error: any) {
+  } catch (error) {
+    const axiosError = error as AxiosError;
     console.error(`[API] ✗ Error fetching forecasts:`, {
-      message: error.message,
-      status: error.response?.status,
-      statusText: error.response?.statusText,
+      message: axiosError.message,
+      status: axiosError.response?.status,
+      statusText: axiosError.response?.statusText,
       hexagonsCount: request.hexagons.length,
     });
     throw error;
