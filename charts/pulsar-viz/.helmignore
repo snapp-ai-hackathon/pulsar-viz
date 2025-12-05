@@ -1,0 +1,17 @@
+# Patterns to ignore when building helm package
+.DS_Store
+# Common VCS dirs
+.git/
+.gitignore
+# Node artifacts
+node_modules/
+npm-debug.log
+yarn.lock
+package-lock.json
+dist/
+# Editor files
+*.swp
+*.bak
+*.tmp
+*.orig
+*.rej
