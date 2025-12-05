@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: pulsar-viz
+  repository: github.com//pulsar-viz
   tag: "latest"
   pullPolicy: IfNotPresent
 
@@ -43,5 +43,4 @@ affinity: {}
 
 # Values for the application configuration ConfigMap
 config:
-  VITE_MAPBOX_TOKEN: ""
   VITE_API_URL: ""

@@ -34,7 +34,6 @@ jobs:
       - name: Build app
         run: npm run build
         env:
-          VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
       - name: Set up Docker Buildx
@@ -58,5 +57,4 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           build-args: |
-            VITE_MAPBOX_TOKEN=${{ secrets.VITE_MAPBOX_TOKEN }}
             VITE_API_URL=${{ secrets.VITE_API_URL }}

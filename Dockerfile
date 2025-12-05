@@ -7,10 +7,7 @@ RUN npm ci
 
 COPY . .
 
-# Build-time environment configuration for Vite
-ARG VITE_MAPBOX_TOKEN
 ARG VITE_API_URL
-ENV VITE_MAPBOX_TOKEN=${VITE_MAPBOX_TOKEN}
 ENV VITE_API_URL=${VITE_API_URL}
 
 RUN npm run build
