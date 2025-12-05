@@ -6,8 +6,25 @@ import type { HexagonInfo, ForecastResult, BulkForecastRequest } from "./types";
  * Backend returns H3 indices as decimal strings (e.g., "613280337128062975")
  * but h3-js expects hexadecimal format (e.g., "882cf37a23fffff").
  */
-export function decimalToH3Hex(decimalStr: string): string {
-  return BigInt(decimalStr).toString(16);
+export function decimalToH3Hex(decimalStr: string | number): string {
+  try {
+    // Convert to string first
+    const str = String(decimalStr);
+    
+    if (!str || str === 'undefined' || str === 'null' || str === 'NaN') {
+      console.error(`Invalid decimal string: ${decimalStr}`);
+      throw new Error(`Invalid decimal string: ${decimalStr}`);
+    }
+
+    // Convert to BigInt and then to hex
+    // h3-js expects hex string without '0x' prefix
+    const hex = BigInt(str).toString(16);
+    
+    return hex;
+  } catch (error) {
+    console.error(`Error converting decimal to hex: ${decimalStr}`, error);
+    throw error;
+  }
 }
 
 type RawSurgeDelta =
@@ -84,18 +101,50 @@ export async function fetchHexagons(
   serviceType?: number
 ): Promise<HexagonInfo[]> {
   const params = serviceType ? { service_type: serviceType } : {};
-  const response = await apiClient.get<HexagonInfo[]>("/hexagons", { params });
-  return response.data;
+  const url = `/hexagons`;
+  console.log(`[API] Fetching hexagons from ${apiClient.defaults.baseURL}${url}`, params);
+  
+  try {
+    const response = await apiClient.get<HexagonInfo[]>(url, { params });
+    console.log(`[API] ✓ Received ${response.data?.length || 0} hexagons`);
+    if (response.data && response.data.length > 0) {
+      console.log(`[API] Sample hexagon:`, response.data[0]);
+    }
+    return response.data || [];
+  } catch (error: any) {
+    console.error(`[API] ✗ Error fetching hexagons:`, {
+      message: error.message,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      data: error.response?.data,
+    });
+    throw error;
+  }
 }
 
 export async function fetchBulkForecast(
   request: BulkForecastRequest
 ): Promise<ForecastResult[]> {
-  const response = await apiClient.post<ForecastResult[]>(
-    "/forecast/bulk",
-    request
-  );
-  return normalizeForecastResponse(response.data);
+  const url = "/forecast/bulk";
+  console.log(`[API] Fetching forecasts for ${request.hexagons.length} hexagons from ${apiClient.defaults.baseURL}${url}`);
+  
+  try {
+    const response = await apiClient.post<ForecastResult[]>(url, request, {
+      timeout: 120000, // 120 seconds for bulk requests
+    });
+    console.log(`[API] ✓ Received ${response.data?.length || 0} forecasts`);
+    const normalized = normalizeForecastResponse(response.data);
+    console.log(`[API] ✓ Normalized to ${normalized.length} forecasts`);
+    return normalized;
+  } catch (error: any) {
+    console.error(`[API] ✗ Error fetching forecasts:`, {
+      message: error.message,
+      status: error.response?.status,
+      statusText: error.response?.statusText,
+      hexagonsCount: request.hexagons.length,
+    });
+    throw error;
+  }
 }
 
 export async function fetchForecast(
