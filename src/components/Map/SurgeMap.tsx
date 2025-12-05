@@ -4,6 +4,7 @@ import { cellToBoundary } from "h3-js";
 import { useFilterStore } from "../../store/filterStore";
 import { useHexagonData } from "../../hooks/useHexagonData";
 import { surgeToColor } from "../../utils/colors";
+import { decimalToH3Hex } from "../../api";
 import type { HexagonWithForecast } from "../../api";
 import type { LatLngTuple } from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -54,7 +55,8 @@ function SurgeHexagons({ hexagons }: { hexagons?: HexagonWithForecast[] }) {
 
     return hexagons.map((hex) => {
       const [r, g, b, a] = surgeToColor(hex.surge_delta_percent);
-      const boundary = cellToBoundary(hex.hexagon).map(
+      const h3Index = decimalToH3Hex(hex.hexagon);
+      const boundary = cellToBoundary(h3Index).map(
         ([lat, lng]) => [lat, lng] as LatLngTuple
       );
 

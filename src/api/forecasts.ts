@@ -6,7 +6,7 @@ import type { HexagonInfo, ForecastResult, BulkForecastRequest } from "./types";
  * Backend returns H3 indices as decimal strings (e.g., "613280337128062975")
  * but h3-js expects hexadecimal format (e.g., "882cf37a23fffff").
  */
-function decimalToH3Hex(decimalStr: string): string {
+export function decimalToH3Hex(decimalStr: string): string {
   return BigInt(decimalStr).toString(16);
 }
 
@@ -65,7 +65,7 @@ function normalizeForecastResponse(payload: unknown): ForecastResult[] {
     if (!hexagon) continue;
 
     normalized.push({
-      hexagon: decimalToH3Hex(String(hexagon)),
+      hexagon: String(hexagon),
       service_type: Number(data.service_type ?? 0),
       horizon_min: Number(data.horizon_min ?? 0),
       demand: Number(data.demand ?? 0),
@@ -85,10 +85,7 @@ export async function fetchHexagons(
 ): Promise<HexagonInfo[]> {
   const params = serviceType ? { service_type: serviceType } : {};
   const response = await apiClient.get<HexagonInfo[]>("/hexagons", { params });
-  return response.data.map((hex) => ({
-    ...hex,
-    hexagon: decimalToH3Hex(hex.hexagon),
-  }));
+  return response.data;
 }
 
 export async function fetchBulkForecast(
