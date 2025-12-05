@@ -3,14 +3,14 @@ import { fetchHexagons, fetchBulkForecast } from "../api";
 import type { HexagonWithForecast } from "../api";
 
 export function useHexagonData(serviceType: number) {
-  // First, fetch the list of hexagons
+  // Fetch the list of hexagons
   const hexagonsQuery = useQuery({
     queryKey: ["hexagons", serviceType],
     queryFn: () => fetchHexagons(serviceType),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
-  // Then, fetch forecasts for all hexagons
+  // Fetch forecasts for all hexagons
   const forecastsQuery = useQuery({
     queryKey: ["forecasts", serviceType, hexagonsQuery.data?.length],
     queryFn: async () => {
@@ -43,28 +43,15 @@ export function useHexagonData(serviceType: number) {
     staleTime: 2 * 60 * 1000, // 2 minutes
   });
 
-  // Combine hexagon info with forecast data
-  const hexagonsWithForecast: HexagonWithForecast[] = [];
-
-  if (hexagonsQuery.data && forecastsQuery.data) {
-    const forecastMap = new Map(
-      forecastsQuery.data.map((f) => [f.hexagon, f])
-    );
-
-    for (const hex of hexagonsQuery.data) {
-      const forecast = forecastMap.get(hex.hexagon);
-      if (forecast) {
-        hexagonsWithForecast.push({
-          hexagon: hex.hexagon,
-          service_type: hex.service_type,
-          surge_delta_percent: forecast.surge_delta_percent,
-          confidence: forecast.confidence,
-          demand: forecast.demand,
-          driver_gap: forecast.driver_gap,
-        });
-      }
-    }
-  }
+  // Map forecast data directly to HexagonWithForecast format
+  const hexagonsWithForecast: HexagonWithForecast[] = (forecastsQuery.data ?? []).map((f) => ({
+    hexagon: f.hexagon,
+    service_type: f.service_type,
+    surge_delta_percent: f.surge_delta_percent,
+    confidence: f.confidence,
+    demand: f.demand,
+    driver_gap: f.driver_gap,
+  }));
 
   return {
     data: hexagonsWithForecast,
