@@ -43,4 +43,4 @@ affinity: {}
 
 # Values for the application configuration ConfigMap
 config:
-  VITE_API_URL: ""
+  VITE_API_URL: "http://pulsar.apps.private.okd4.teh-2.snappcloud.io"
