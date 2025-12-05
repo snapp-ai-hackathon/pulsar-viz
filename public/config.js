@@ -1,5 +1,3 @@
-// Runtime configuration - this file is generated at container startup in production
-// For local development, modify values here
 window.__CONFIG__ = {
-  API_URL: "http://localhost:8088"
+  API_URL: "http://pulsar.apps.private.okd4.teh-2.snappcloud.io"
 };

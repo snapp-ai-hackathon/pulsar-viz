@@ -12,6 +12,6 @@ export const apiClient = axios.create({
   baseURL:
     window.__CONFIG__?.API_URL ||
     import.meta.env.VITE_API_URL ||
-    "http://localhost:8088",
+    "http://pulsar.apps.private.okd4.teh-2.snappcloud.io",
   timeout: 30000,
 });

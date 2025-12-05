@@ -19,10 +19,10 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <div className="w-full h-screen flex">
         {/* Sidebar */}
-        <aside className="w-72 bg-[#0f172a] text-slate-100 p-5 flex flex-col gap-6 border-r border-orange-500/30 shadow-xl">
+        <aside className="w-80 bg-white text-slate-900 p-6 flex flex-col gap-6 border-r border-orange-200 shadow-xl">
           <header>
-            <h1 className="text-xl font-bold text-orange-400">Pulsar</h1>
-            <p className="text-sm text-slate-300">Surge Prediction Map</p>
+            <h1 className="text-xl font-bold text-orange-500">Pulsar</h1>
+            <p className="text-sm text-slate-600">Surge Prediction Map</p>
           </header>
 
           <div className="flex flex-col gap-4">
@@ -36,7 +36,7 @@ function App() {
         </aside>
 
         {/* Map */}
-        <main className="flex-1 relative">
+        <main className="flex-1 relative bg-slate-900">
           <SurgeMap />
         </main>
       </div>
