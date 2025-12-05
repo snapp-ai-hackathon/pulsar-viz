@@ -17,9 +17,9 @@ export function SurgeLegend() {
       </div>
       <div className="mt-3 pt-3 border-t border-gray-700">
         <p className="text-xs text-gray-400">
-          Blue = oversupply
+          Light = oversupply
           <br />
-          Red = high demand
+          Dark orange = high demand
         </p>
       </div>
     </div>
