@@ -18,7 +18,7 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 EXPOSE 8080
 USER root
 RUN chmod +x /docker-entrypoint.sh && \
-    chown -R 101:101 /usr/share/nginx/html
+  chown -R 101:101 /usr/share/nginx/html
 USER 101
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
