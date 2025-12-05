@@ -5,6 +5,7 @@ import { H3HexagonLayer } from "@deck.gl/geo-layers";
 import { useFilterStore } from "../../store/filterStore";
 import { useHexagonData } from "../../hooks/useHexagonData";
 import { surgeToColor } from "../../utils/colors";
+import type { ViewStateChangeParameters } from "@deck.gl/core";
 import type { HexagonWithForecast } from "../../api";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -12,18 +13,17 @@ const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
 export function SurgeMap() {
   const { serviceType, viewport, setViewport } = useFilterStore();
-  const { data: hexagons, isLoading } = useHexagonData(serviceType);
+  const { data: hexagons, isLoading, isError, error } = useHexagonData(serviceType);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onViewStateChange = useCallback(
-    ({ viewState }: any) => {
-      if (viewState?.longitude !== undefined) {
-        setViewport({
-          longitude: viewState.longitude,
-          latitude: viewState.latitude,
-          zoom: viewState.zoom,
-        });
-      }
+    ({ viewState }: ViewStateChangeParameters) => {
+      if (viewState?.longitude === undefined) return;
+
+      setViewport({
+        longitude: viewState.longitude,
+        latitude: viewState.latitude,
+        zoom: viewState.zoom,
+      });
     },
     [setViewport]
   );
@@ -80,6 +80,15 @@ export function SurgeMap() {
       {isLoading && (
         <div className="absolute top-4 left-4 bg-black/70 text-white px-4 py-2 rounded-lg">
           Loading hexagon data...
+        </div>
+      )}
+
+      {isError && (
+        <div className="absolute top-4 left-4 right-4 bg-red-900/90 text-white px-4 py-3 rounded-lg border border-red-700 shadow-lg">
+          <p className="font-semibold">Failed to load surge data</p>
+          <p className="text-sm text-red-100">
+            {error instanceof Error ? error.message : "The backend did not respond."}
+          </p>
         </div>
       )}
 
