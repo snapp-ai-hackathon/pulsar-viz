@@ -19,10 +19,10 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <div className="w-full h-screen flex">
         {/* Sidebar */}
-        <aside className="w-64 bg-gray-900 p-4 flex flex-col gap-6 border-r border-gray-800">
+        <aside className="w-64 bg-neutral-950 p-4 flex flex-col gap-6 border-r border-orange-900/30">
           <header>
-            <h1 className="text-xl font-bold text-white">Pulsar</h1>
-            <p className="text-sm text-gray-400">Surge Prediction Map</p>
+            <h1 className="text-xl font-bold text-orange-500">Pulsar</h1>
+            <p className="text-sm text-neutral-400">Surge Prediction Map</p>
           </header>
 
           <div className="flex flex-col gap-4">

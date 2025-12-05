@@ -6,11 +6,11 @@ export function ServiceTypeFilter() {
 
   return (
     <div className="flex flex-col gap-2">
-      <label className="text-sm font-medium text-gray-300">Service Type</label>
+      <label className="text-sm font-medium text-neutral-300">Service Type</label>
       <select
         value={serviceType}
         onChange={(e) => setServiceType(Number(e.target.value))}
-        className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="bg-neutral-900 border border-orange-900/40 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
       >
         {SERVICE_TYPES.map((type) => (
           <option key={type.id} value={type.id}>
