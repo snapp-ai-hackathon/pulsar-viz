@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: github.com//pulsar-viz
+  repository: ghcr.io/snapp-ai-hackathon/pulsar-viz
   tag: "latest"
   pullPolicy: IfNotPresent
 
